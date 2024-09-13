@@ -18,6 +18,10 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = C:\Users\jodyford\Desktop\adventureworks\AdventureWorksWebApp
 build_property._RazorSourceGeneratorDebug = 
 
+[C:/Users/jodyford/Desktop/adventureworks/AdventureWorksWebApp/Pages/adventureworks.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcYWR2ZW50dXJld29ya3MuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/jodyford/Desktop/adventureworks/AdventureWorksWebApp/Pages/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 

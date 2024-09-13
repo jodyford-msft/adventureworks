@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AdventureWorksWebApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e7e8b44c5893ea285beaefb35d9b0a2c113337f2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+709f69a50e28128676591ba662b111eaaf1247ae")]
 [assembly: System.Reflection.AssemblyProductAttribute("AdventureWorksWebApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AdventureWorksWebApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
