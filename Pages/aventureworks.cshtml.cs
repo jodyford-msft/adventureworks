@@ -1,17 +1,20 @@
+using Azure.Core;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
-using Microsoft.Data.SqlClient; // Updated namespace
 using System.Threading.Tasks;
 
 public class AdventureWorksModel : PageModel
 {
     private readonly IConfiguration _configuration;
+    private readonly TokenCredential _tokenCredential;
 
-    public AdventureWorksModel(IConfiguration configuration)
+    public AdventureWorksModel(IConfiguration configuration, TokenCredential tokenCredential)
     {
         _configuration = configuration;
+        _tokenCredential = tokenCredential;
     }
 
     public List<Person> People { get; set; } = new List<Person>();
@@ -27,22 +30,24 @@ public class AdventureWorksModel : PageModel
 
         try
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            var connection = new SqlConnection(connectionString)
             {
-                await connection.OpenAsync();
-                string query = "SELECT TOP 10 FirstName, LastName FROM Person.Person";
+                AccessToken = await new AzureServiceTokenProvider().GetAccessTokenAsync("https://database.windows.net/")
+            };
 
-                using (SqlCommand command = new SqlCommand(query, connection))
-                using (SqlDataReader reader = await command.ExecuteReaderAsync())
+            await connection.OpenAsync();
+            string query = "SELECT TOP 10 FirstName, LastName FROM Person.Person";
+
+            using (SqlCommand command = new SqlCommand(query, connection))
+            using (SqlDataReader reader = await command.ExecuteReaderAsync())
+            {
+                while (await reader.ReadAsync())
                 {
-                    while (await reader.ReadAsync())
+                    People.Add(new Person
                     {
-                        People.Add(new Person
-                        {
-                            FirstName = reader["FirstName"]?.ToString() ?? string.Empty,
-                            LastName = reader["LastName"]?.ToString() ?? string.Empty
-                        });
-                    }
+                        FirstName = reader["FirstName"]?.ToString() ?? string.Empty,
+                        LastName = reader["LastName"]?.ToString() ?? string.Empty
+                    });
                 }
             }
         }
