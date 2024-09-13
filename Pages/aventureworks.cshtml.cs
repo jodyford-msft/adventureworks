@@ -1,4 +1,5 @@
 using Azure.Core;
+using Azure.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Data.SqlClient;
@@ -11,10 +12,10 @@ public class AdventureWorksModel : PageModel
     private readonly IConfiguration _configuration;
     private readonly TokenCredential _tokenCredential;
 
-    public AdventureWorksModel(IConfiguration configuration, TokenCredential tokenCredential)
+    public AdventureWorksModel(IConfiguration configuration)
     {
         _configuration = configuration;
-        _tokenCredential = tokenCredential;
+        _tokenCredential = new DefaultAzureCredential();
     }
 
     public List<Person> People { get; set; } = new List<Person>();
@@ -32,7 +33,9 @@ public class AdventureWorksModel : PageModel
         {
             var connection = new SqlConnection(connectionString)
             {
-                AccessToken = await new AzureServiceTokenProvider().GetAccessTokenAsync("https://database.windows.net/")
+                AccessToken = (await _tokenCredential.GetTokenAsync(
+                    new TokenRequestContext(new[] { "https://database.windows.net/.default" })
+                )).Token
             };
 
             await connection.OpenAsync();
