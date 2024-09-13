@@ -81,5 +81,15 @@ az identity show --name $MI_NAME --resource-group $RESOURCE_GROUP_NAME
 # Assign Managed Identity to Web App
 az webapp identity assign --name $APP_NAME --resource-group $RESOURCE_GROUP_NAME --identities $MI_NAME
 
+# Get the principal ID of the managed identity
+PRINCIPAL_ID=$(az identity show --name $MI_NAME --resource-group $RESOURCE_GROUP_NAME--query principalId --output tsv)
+
+# Grant the managed identity access to the SQL server
+az sql server ad-admin create --resource-group $RESOURCE_GROUP_NAME --server srvr111651726189442 --display-name $MI_NAME2 --object-id $PRINCIPAL_ID
+
+# Grant the managed identity the necessary roles on the SQL database
+az sql db role assignment create --resource-group $RESOURCE_GROUP_NAME --server $SQL_SERVER_NAME2 --database adventureworks --role db_datareader --assignee $PRINCIPAL_ID
+az sql db role assignment create --resource-group $RESOURCE_GROUP_NAME --server $SQL_SERVER_NAME --database adventureworks --role db_datawriter --assignee $PRINCIPAL_ID
+
 ```
 
